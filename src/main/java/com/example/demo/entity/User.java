@@ -1,6 +1,7 @@
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.email;
+import
 @Entity
 public class User{
     @Id
@@ -11,10 +12,11 @@ public class User{
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role=Role.USER;
-    public Role(){
-        String ADMIN;
+    public enum Role(){
+        ADMIN;
         USER;
     }
+    private LocalDateTime  createdAt
 
 
 }
