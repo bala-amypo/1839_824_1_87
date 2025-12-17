@@ -9,7 +9,12 @@ public class User{
     @column (unique=true)
     private String email;
     private String password;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private Role role=Role.USER;
+    public Role(){
+        String ADMIN;
+        USER;
+    }
 
 
 }
