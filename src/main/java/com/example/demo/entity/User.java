@@ -2,7 +2,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.email;
 import jakarta.persistence.Enumerated;
-import java.LocalDate
+import java.time.LocalDateTime;
 @Entity
 public class User{
     @Id
@@ -18,7 +18,19 @@ public class User{
         USER;
     }
     private LocalDateTime  createdAt;
-    public class
+    public Long getid(){
+        return id;
+    }
+    public void setid(Long id){
+        this.id=id;
+    }
+        public String fullName(){
+        return fullName;
+    }
+    public void setfullName(Long id){
+        this.id=id;
+    }
+
 
 
 }
