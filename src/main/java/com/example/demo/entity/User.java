@@ -2,6 +2,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.email;
 import jakarta.persistence.Enumerated;
+import java.LocalDate
 @Entity
 public class User{
     @Id
@@ -17,6 +18,7 @@ public class User{
         USER;
     }
     private LocalDateTime  createdAt;
+    public class
 
 
 }
