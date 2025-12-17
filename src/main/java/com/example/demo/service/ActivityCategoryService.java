@@ -1,1 +1,3 @@
-public classActivity
+public class ActivityCategory{
+    
+}
