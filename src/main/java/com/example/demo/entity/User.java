@@ -42,10 +42,10 @@ public class User{
     public void setPassword(String password){
         this.password=password;
     }
-            public String getRole(){
+    public String getRole(){
         return role;
     }
-    public void setRole(String roll){
+    public void setRole(Role role){
         this.role=role;
     }
             public LocalDateTime getCreatedAt(){
