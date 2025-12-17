@@ -42,7 +42,7 @@ public class User{
     public void setPassword(String password){
         this.password=password;
     }
-    public String getRole(){
+    public Role getRole(){
         return role;
     }
     public void setRole(Role role){
