@@ -18,14 +18,14 @@ public class User{
         ADMIN,
         USER
     }
-    private LocalDateTime  createdAt;
+    private LocalDateTime createdAt;
     public Long getId(){
         return id;
     }
     public void setId(Long id){
         this.id=id;
     }
-        public String getFullName(){
+    public String getFullName(){
         return fullName;
     }
     public void setFullName(String fullName){
@@ -55,7 +55,16 @@ public class User{
     public void setCreatedAt(LocalDateTime createdAt){
         this.createdAt=createdAt;
     }
-
+public User()
+{}
+public User(Long id,String fullName,String email,String password,Role role,LocalDateTime createdAt){
+    this.id=id;
+    this.fullName=fullName;
+    this.email=email;
+    this.password=password;
+    this.role=role;
+    this.createdAt=createdAt;
+}
 
 
 }
