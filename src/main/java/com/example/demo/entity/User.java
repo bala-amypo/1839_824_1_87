@@ -8,7 +8,8 @@ public class User{
     private String fullName;
     @column (unique=true)
     private String email;
-    private String 
+    private String password;
+    private String role;
 
 
 }
