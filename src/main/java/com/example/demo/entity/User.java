@@ -24,11 +24,29 @@ public class User{
     public void setid(Long id){
         this.id=id;
     }
-        public String fullName(){
+        public String getfullName(){
         return fullName;
     }
-    public void setfullName(Long id){
-        this.id=id;
+    public void setfullName(String fullName){
+        this.fullName=fullName;
+    }
+            public String getemail(){
+        return email;
+    }
+    public void setemail(String email){
+        this.email=email;
+    }
+            public String getpassword(){
+        return password;
+    }
+    public void setpassword(String password){
+        this.password=password;
+    }
+            public String getfullName(){
+        return fullName;
+    }
+    public void setfullName(String fullName){
+        this.fullName=fullName;
     }
 
 
