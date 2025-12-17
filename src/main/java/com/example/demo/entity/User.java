@@ -1,5 +1,6 @@
 import.jarkata.persistance.Entity;
-import.jar
+import.jarkata.persistance.Column;
+import.jarkata.persistance.PrePersist;
 @Entity
 public class User{
     private Long id;
@@ -8,5 +9,13 @@ public class User{
     private String description;
     @PrePersist
     private LocalDateTime createdAt;
+    public Long getId()
+    {
+        return id;
+    }
 
+    public void setId(Long id)
+    {
+        this.id=id;
+    }
 }
