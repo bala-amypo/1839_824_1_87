@@ -42,11 +42,17 @@ public class User{
     public void setpassword(String password){
         this.password=password;
     }
-            public String getfullName(){
-        return fullName;
+            public String getrole(){
+        return role;
     }
-    public void setfullName(String fullName){
-        this.fullName=fullName;
+    public void setrole(String roll){
+        this.role=role;
+    }
+            public LocalDateTime getcreatedAt(){
+        return createdAt;
+    }
+    public void setcreatedAt(LocalDateTime createdAt){
+        this.createdAt=createdAt;
     }
 
 
