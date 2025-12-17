@@ -1,7 +1,7 @@
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.email;
-import
+import jakarta.persistence.Enumerated;
 @Entity
 public class User{
     @Id
@@ -16,7 +16,7 @@ public class User{
         ADMIN;
         USER;
     }
-    private LocalDateTime  createdAt
+    private LocalDateTime  createdAt;
 
 
 }
