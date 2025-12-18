@@ -25,7 +25,7 @@ public void setId(Long id){
     this.id=id;
 }
 public String getCategory(){
-    return categoryName;
+    return category;
 }
 public void setCategory(String category){
     this.category=category;
