@@ -13,9 +13,10 @@ public class ActivityLog
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String typeName;
-    private String unit;
-    private LocalDateTime createdAt;
+    private Double quantity;;
+    private LocalDate acivityDate;
+    private LocalDatetime loggedAt;
+    private Double estimatedEmission;
 
 public Long getId(){
     return id; 
@@ -23,13 +24,13 @@ public Long getId(){
 public void setId(Long id){
     this.id=id;
 }
-public String getTypeName(){
-    return typeName;
+public Double getIdQuantity(){
+    return quantity;
 }
-public void setTypeName(String typeName){
-    this.typeName=typeName;
+public void setQuantity(Double quantity){
+    this.quantity=quantity;
 }
-public String getUnit(){
+public (){
     return unit;
 }
 public void setUnit(String unit){
