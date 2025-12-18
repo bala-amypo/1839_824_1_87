@@ -1,6 +1,7 @@
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.PrePersist;
+import j
 
 @Entity
 public class ActivityCategory
@@ -19,5 +20,19 @@ public long getId(){
 public void setId(Long id){
     this.id=id;
 }
+public String getCategoryName(){
+    return categoryName;
+}
+public void setCategoryName(String categoryName){
+    this.category=category;
+}
+public String getDescription(){
+    return description;
+}
+public void setDescription(String description){
+    this.description=description;
+}
+public LocalDateTime getCreatedAt(){
 
+}
 }
