@@ -1,5 +1,5 @@
 package com.example.demo.entity;
-
+import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 @Entity
 public class ActivityLog
 {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String typeName;
     private String unit;
