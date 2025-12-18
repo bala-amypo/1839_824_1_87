@@ -3,14 +3,14 @@ import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
 
 @Entity
-public class ActivityCategory
+public class ActivityLog
 {
     private Long id;
     private String typeName;
     private String unit;
     private LocalDateTime createdAt;
 
-public long getId(){
+public Long getId(){
     return id; 
 }
 public void setId(Long id){
