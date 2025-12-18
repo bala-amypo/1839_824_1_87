@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 public class ActivityCategory
 {
     private Long id;
-    private 
+    private String categoryName;
+    private String description;
+    private LocalDateTime createdAt;
 
 public long getId(){
     return id; 
@@ -36,7 +38,7 @@ this.createdAt=createdAt;
 public ActivityCategory(){}
 public ActivityCategory(Long id,String categoryName,String description,LocalDateTime createdAt){
     this.id=id;
-    this.categoryName=categryName;
+    this.categoryName=categoryName;
     this.description=description;
     this.createdAt=createdAt;
 }
