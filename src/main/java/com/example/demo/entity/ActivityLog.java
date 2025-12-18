@@ -16,7 +16,7 @@ public class ActivityLog
     private Long id;
     private Double quantity;;
     private LocalDate activityDate;
-    private LocalDatetime loggedAt;
+    private LocalDateTime loggedAt;
     private Double estimatedEmission;
 
 public Long getId(){
