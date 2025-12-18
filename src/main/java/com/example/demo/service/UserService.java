@@ -1,3 +1,3 @@
-public class UserService{
+public interface  UserService{
     
 }
