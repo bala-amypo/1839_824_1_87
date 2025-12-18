@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 public class ActivityLog
@@ -14,7 +15,7 @@ public class ActivityLog
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double quantity;;
-    private LocalDate acivityDate;
+    private LocalDate activityDate;
     private LocalDatetime loggedAt;
     private Double estimatedEmission;
 
