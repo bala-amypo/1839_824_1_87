@@ -1,3 +1,4 @@
+package com.example.demo
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;

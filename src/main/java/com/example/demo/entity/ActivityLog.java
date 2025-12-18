@@ -35,8 +35,8 @@ public LocalDateTime getCreatedAt(){
 public void setCreatedAt(LocalDateTime createdAt){
 this.createdAt=createdAt;
 }
-public ActivityCategory(){}
-public ActivityCategory(Long id,String typeName,String unit,LocalDateTime createdAt){
+public ActivityLog(){}
+public ActivityLog(Long id,String typeName,String unit,LocalDateTime createdAt){
     this.id=id;
     this.typeName=typeName;
     this.unit=unit;
