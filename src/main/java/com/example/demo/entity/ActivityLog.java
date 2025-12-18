@@ -20,13 +20,13 @@ public String getTypeName(){
     return typeName;
 }
 public void setTypeName(String typeName){
-    this.categoryName=categoryName;
+    this.typeName=typeName;
 }
-public String getDescription(){
-    return description;
+public String getUnit(){
+    return unit;
 }
-public void setDescription(String description){
-    this.description=description;
+public void setUnit(String unit){
+    this.unit=unit;
 }
 public LocalDateTime getCreatedAt(){
     return createdAt;
@@ -36,10 +36,10 @@ public void setCreatedAt(LocalDateTime createdAt){
 this.createdAt=createdAt;
 }
 public ActivityCategory(){}
-public ActivityCategory(Long id,String categoryName,String description,LocalDateTime createdAt){
+public ActivityCategory(Long id,String typeName,String unit,LocalDateTime createdAt){
     this.id=id;
-    this.categoryName=categoryName;
-    this.description=description;
+    this.typeName=typeName;
+    this.unit=unit;
     this.createdAt=createdAt;
 }
 }
