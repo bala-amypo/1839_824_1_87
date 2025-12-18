@@ -1,14 +1,17 @@
 package com.example.demo.entity;
-
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 @Entity
-public class User{
+public class EmissionFactor{
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private Double factorValue;
     private String unit;
+    private LocalDateTime createdAt;
     public Long getId(){
         return id;
     }
@@ -24,29 +27,21 @@ public class User{
     public String getUnit(){
         return unit;
     }
-    public void setUnit(String password){
-        this.password=password;
+    public void setUnit(String unit){
+        this.unit=unit;
     }
-    public Role getRole(){
-        return role;
-    }
-    public void setRole(Role role){
-        this.role=role;
-    }
-            public LocalDateTime getCreatedAt(){
+    public LocalDateTime getCreatedAt(){
         return createdAt;
     }
     public void setCreatedAt(LocalDateTime createdAt){
         this.createdAt=createdAt;
     }
-public User()
+public EmissionFactor()
 {}
-public User(Long id,String fullName,String email,String password,Role role,LocalDateTime createdAt){
+public EmissionFactor(Long id,Double factorValue,String unit,LocalDateTime createdAt){
     this.id=id;
-    this.fullName=fullName;
-    this.email=email;
-    this.password=password;
-    this.role=role;
+    this.factorValue=factorValue;
+    this.unit=unit;
     this.createdAt=createdAt;
 }
 
