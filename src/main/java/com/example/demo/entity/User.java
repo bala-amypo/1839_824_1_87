@@ -1,69 +1,109 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
 @Entity
-public class User{
-    @Id
-    private Long id;
-    private String fullName;
-    @Column (unique=true)
-    private String email;
-    private String password;
-    private Role role=Role.USER;
-    public enum Role{
-        ADMIN,
-        USER
+@Table(
+    name = "users",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
     }
+)
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-    public Long getId(){
+
+    // =======================
+    // Constructors
+    // =======================
+
+    public User() {
+        // default constructor
+    }
+
+    public User(String fullName, String email, String password, Role role) {
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    // =======================
+    // Lifecycle Callbacks
+    // =======================
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        if (this.role == null) {
+            this.role = Role.USER;
+        }
+    }
+
+    // =======================
+    // Getters & Setters
+    // =======================
+
+    public Long getId() {
         return id;
     }
-    public void setId(Long id){
-        this.id=id;
-    }
-    public String getFullName(){
+
+    public String getFullName() {
         return fullName;
     }
-    public void setFullName(String fullName){
-        this.fullName=fullName;
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
-            public String getEmail(){
+
+    public String getEmail() {
         return email;
     }
-    public void setEmail(String email){
-        this.email=email;
+
+    public void setEmail(String email) {
+        this.email = email;
     }
-            public String getPassword(){
+
+    public String getPassword() {
         return password;
     }
-    public void setPassword(String password){
-        this.password=password;
+
+    // Password length validation (≥ 8 characters)
+    public void setPassword(String password) {
+        if (password == null || password.length() < 8) {
+            throw new IllegalArgumentException("Password must be at least 8 characters long");
+        }
+        this.password = password;
     }
-    public Role getRole(){
+
+    public Role getRole() {
         return role;
     }
-    public void setRole(Role role){
-        this.role=role;
+
+    public void setRole(Role role) {
+        this.role = role;
     }
-            public LocalDateTime getCreatedAt(){
+
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(LocalDateTime createdAt){
-        this.createdAt=createdAt;
-    }
-public User()
-{}
-public User(Long id,String fullName,String email,String password,Role role,LocalDateTime createdAt){
-    this.id=id;
-    this.fullName=fullName;
-    this.email=email;
-    this.password=password;
-    this.role=role;
-    this.createdAt=createdAt;
-}
-
-
 }
