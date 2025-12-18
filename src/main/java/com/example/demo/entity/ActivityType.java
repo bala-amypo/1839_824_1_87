@@ -5,8 +5,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-    name = "activity_types",
-    uniqueConstraints = @UniqueConstraint(columnNames = "type_name")
+    name = "activity_type",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "type_name")
+    }
 )
 public class ActivityType {
 
@@ -17,9 +19,9 @@ public class ActivityType {
     @Column(name = "type_name", nullable = false, unique = true)
     private String typeName;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "category_id", nullable = false)
-    private ActivityCategory category;
+    private Category category;
 
     @Column(nullable = false)
     private String unit;
@@ -27,23 +29,22 @@ public class ActivityType {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // ====================================
-    // Auto-set createdAt before persisting
-    // ====================================
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // ====================================
-    // Getters and Setters
-    // ====================================
-    public Long getId() {
-        return id;
+    public ActivityType() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public ActivityType(String typeName, Category category, String unit) {
+        this.typeName = typeName;
+        this.category = category;
+        this.unit = unit;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getTypeName() {
@@ -54,11 +55,11 @@ public class ActivityType {
         this.typeName = typeName;
     }
 
-    public ActivityCategory getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(ActivityCategory category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -72,9 +73,5 @@ public class ActivityType {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }
