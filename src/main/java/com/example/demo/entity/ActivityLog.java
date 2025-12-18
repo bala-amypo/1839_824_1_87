@@ -43,12 +43,18 @@ public LocalDateTime getLoggedAt(){
 public void setLoggedAt(LocalDateTime loggedAt){
 this.loggedAt=loggedAt;
 }
-public class Double 
+public class Double getEstimatedEmission(){
+    return estimatedEmission;
+}
+public void setEstimatedEmission(Double estimatedEmission){
+    this.estimatedEmission=estimatedEmission;
+}
 public ActivityLog(){}
-public ActivityLog(Long id,String typeName,String unit,LocalDateTime createdAt){
+public ActivityLog(Long id,Double quantity, LocalDate activityDate,LocalDateTime loggedAt,Double estimatedEmission){
     this.id=id;
-    this.typeName=typeName;
-    this.unit=unit;
-    this.createdAt=createdAt;
+    this.quantity=quantity;
+    this.activityDate=activityDate;
+    this.loggedAt=loggedAt;
+    this.
 }
 }
