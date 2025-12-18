@@ -32,24 +32,23 @@ public class User {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // =======================
+    // =====================
     // Constructors
-    // =======================
+    // =====================
 
     public User() {
-        // default constructor
     }
 
     public User(String fullName, String email, String password, Role role) {
         this.fullName = fullName;
         this.email = email;
-        this.password = password;
+        setPassword(password);
         this.role = role;
     }
 
-    // =======================
-    // Lifecycle Callbacks
-    // =======================
+    // =====================
+    // Auto-generated fields
+    // =====================
 
     @PrePersist
     protected void onCreate() {
@@ -59,9 +58,9 @@ public class User {
         }
     }
 
-    // =======================
+    // =====================
     // Getters & Setters
-    // =======================
+    // =====================
 
     public Long getId() {
         return id;
@@ -87,10 +86,12 @@ public class User {
         return password;
     }
 
-    // Password length validation (≥ 8 characters)
+    // Password validation (≥ 8 chars)
     public void setPassword(String password) {
         if (password == null || password.length() < 8) {
-            throw new IllegalArgumentException("Password must be at least 8 characters long");
+            throw new IllegalArgumentException(
+                "Password must be at least 8 characters long"
+            );
         }
         this.password = password;
     }
