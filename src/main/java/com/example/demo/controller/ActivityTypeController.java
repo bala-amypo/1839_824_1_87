@@ -7,9 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/categories/{categoryId}/types")
+@RequestMapping("/api/activity-types")
 public class ActivityTypeController {
 
     private final ActivityTypeService activityTypeService;
@@ -18,24 +19,44 @@ public class ActivityTypeController {
         this.activityTypeService = activityTypeService;
     }
 
+    /* ==========================
+       Create Activity Type
+       ========================== */
     @PostMapping
-    public ResponseEntity<ActivityType> createType(
-            @PathVariable Long categoryId,
-            @RequestBody ActivityType type
-    ) {
-        ActivityType createdType = activityTypeService.createType(categoryId, type);
-        return new ResponseEntity<>(createdType, HttpStatus.CREATED);
+    public ResponseEntity<ActivityType> create(@RequestBody Map<String, Object> request) {
+
+        String typeName = (String) request.get("typeName");
+        String unit = (String) request.get("unit");
+        Long categoryId = Long.valueOf(request.get("categoryId").toString());
+
+        ActivityType created = activityTypeService
+                .createActivityType(typeName, categoryId, unit);
+
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
+    /* ==========================
+       Get All Activity Types
+       ========================== */
     @GetMapping
-    public ResponseEntity<List<ActivityType>> getTypesByCategory(@PathVariable Long categoryId) {
-        List<ActivityType> types = activityTypeService.getTypesByCategory(categoryId);
-        return new ResponseEntity<>(types, HttpStatus.OK);
+    public List<ActivityType> getAll() {
+        return activityTypeService.getAllActivityTypes();
     }
 
-    @GetMapping("/{typeId}")
-    public ResponseEntity<ActivityType> getType(@PathVariable Long typeId) {
-        ActivityType type = activityTypeService.getType(typeId);
-        return new ResponseEntity<>(type, HttpStatus.OK);
+    /* ==========================
+       Get Activity Type By ID
+       ========================== */
+    @GetMapping("/{id}")
+    public ActivityType getById(@PathVariable Long id) {
+        return activityTypeService.getActivityTypeById(id);
+    }
+
+    /* ==========================
+       Delete Activity Type
+       ========================== */
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        activityTypeService.deleteActivityType(id);
     }
 }

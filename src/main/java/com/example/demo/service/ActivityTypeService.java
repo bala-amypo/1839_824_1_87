@@ -6,25 +6,11 @@ import java.util.List;
 
 public interface ActivityTypeService {
 
-    /**
-     * Create a new activity type under a specific category.
-     * @param categoryId ID of the category
-     * @param type ActivityType object to create
-     * @return created ActivityType
-     */
-    ActivityType createType(Long categoryId, ActivityType type);
+    ActivityType createActivityType(String typeName, Long categoryId, String unit);
 
-    /**
-     * Get a single activity type by its ID.
-     * @param id ActivityType ID
-     * @return found ActivityType
-     */
-    ActivityType getType(Long id);
+    List<ActivityType> getAllActivityTypes();
 
-    /**
-     * Get all activity types under a specific category.
-     * @param categoryId ID of the category
-     * @return list of ActivityType
-     */
-    List<ActivityType> getTypesByCategory(Long categoryId);
+    ActivityType getActivityTypeById(Long id);
+
+    void deleteActivityType(Long id);
 }

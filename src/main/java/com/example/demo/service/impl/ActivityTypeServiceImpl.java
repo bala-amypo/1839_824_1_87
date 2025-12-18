@@ -1,66 +1,60 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ActivityCategory;
 import com.example.demo.entity.ActivityType;
-import com.example.demo.repository.ActivityCategoryRepository;
+import com.example.demo.entity.Category;
 import com.example.demo.repository.ActivityTypeRepository;
+import com.example.demo.repository.CategoryRepository;
 import com.example.demo.service.ActivityTypeService;
-import com.example.demo.service.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class ActivityTypeServiceImpl implements ActivityTypeService {
 
-    private final ActivityTypeRepository typeRepository;
-    private final ActivityCategoryRepository categoryRepository;
+    private final ActivityTypeRepository activityTypeRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ActivityTypeServiceImpl(
-            ActivityTypeRepository typeRepository,
-            ActivityCategoryRepository categoryRepository
-    ) {
-        this.typeRepository = typeRepository;
+    public ActivityTypeServiceImpl(ActivityTypeRepository activityTypeRepository,
+                                   CategoryRepository categoryRepository) {
+        this.activityTypeRepository = activityTypeRepository;
         this.categoryRepository = categoryRepository;
     }
 
     @Override
-    public ActivityType createType(Long categoryId, ActivityType type) {
-        // Validate unit
-        if (type.getUnit() == null || type.getUnit().isEmpty()) {
-            throw new IllegalArgumentException("Unit must be provided");
+    public ActivityType createActivityType(String typeName, Long categoryId, String unit) {
+
+        if (activityTypeRepository.existsByTypeName(typeName)) {
+            throw new RuntimeException("Activity type name must be unique");
         }
 
-        // Validate typeName uniqueness
-        if (typeRepository.existsByTypeName(type.getTypeName())) {
-            throw new IllegalArgumentException("Type name must be unique");
-        }
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        // Fetch category
-        ActivityCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Activity category not found with id: " + categoryId
-                ));
-
-        type.setCategory(category);
-        return typeRepository.save(type);
+        ActivityType activityType = new ActivityType(typeName, category, unit);
+        return activityTypeRepository.save(activityType);
     }
 
     @Override
-    public ActivityType getType(Long id) {
-        return typeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Activity type not found with id: " + id
-                ));
+    @Transactional(readOnly = true)
+    public List<ActivityType> getAllActivityTypes() {
+        return activityTypeRepository.findAll();
     }
 
     @Override
-    public List<ActivityType> getTypesByCategory(Long categoryId) {
-        if (!categoryRepository.existsById(categoryId)) {
-            throw new ResourceNotFoundException(
-                    "Activity category not found with id: " + categoryId
-            );
+    @Transactional(readOnly = true)
+    public ActivityType getActivityTypeById(Long id) {
+        return activityTypeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Activity type not found"));
+    }
+
+    @Override
+    public void deleteActivityType(Long id) {
+        if (!activityTypeRepository.existsById(id)) {
+            throw new RuntimeException("Activity type not found");
         }
-        return typeRepository.findByCategoryId(categoryId);
+        activityTypeRepository.deleteById(id);
     }
 }
