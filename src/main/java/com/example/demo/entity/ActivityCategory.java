@@ -4,5 +4,7 @@ import jakarta.persistence.Column;
 public class ActivityCategory
 {
 private long id;
-private categoryName
+@column (unique=true)
+private String categoryName;
+private String description;
 }
