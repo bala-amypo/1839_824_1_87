@@ -1,7 +1,7 @@
 import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.PrePersist;
-import j
+import java.time.LocalDateTime;
 
 @Entity
 public class ActivityCategory
@@ -33,6 +33,12 @@ public void setDescription(String description){
     this.description=description;
 }
 public LocalDateTime getCreatedAt(){
+    return createdAt;
 
 }
+public void setCreatedAt(LocalDateTime createdAt){
+this.createdAt=createdAt;
+}
+public ActivityCategory(){}
+public ActivityCategory(Long id,)
 }
