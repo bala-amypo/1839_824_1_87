@@ -14,7 +14,7 @@ public class ActivityCategory
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String categoryName;
+    private String category;
     private String description;
     private LocalDateTime createdAt;
 
@@ -24,11 +24,11 @@ public long getId(){
 public void setId(Long id){
     this.id=id;
 }
-public String getCategoryName(){
+public String getCategory(){
     return categoryName;
 }
-public void setCategoryName(String categoryName){
-    this.categoryName=categoryName;
+public void setCategory(String category){
+    this.category=category;
 }
 public String getDescription(){
     return description;
@@ -43,9 +43,9 @@ public LocalDateTime getCreatedAt(){
 public void setCreatedAt(LocalDateTime createdAt){
 this.createdAt=createdAt;
 }
-public ActivityCategory(Long id,String categoryName,String description,LocalDateTime createdAt){
+public ActivityCategory(Long id,String category,String description,LocalDateTime createdAt){
     this.id=id;
-    this.categoryName=categoryName;
+    this.category=category;
     this.description=description;
     this.createdAt=createdAt;
 }
