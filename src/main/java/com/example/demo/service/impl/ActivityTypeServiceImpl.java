@@ -18,54 +18,49 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
 
     public ActivityTypeServiceImpl(
             ActivityTypeRepository typeRepository,
-            ActivityCategoryRepository categoryRepository) {
-
+            ActivityCategoryRepository categoryRepository
+    ) {
         this.typeRepository = typeRepository;
         this.categoryRepository = categoryRepository;
     }
 
-    // ====================================
-    // Create activity type under category
-    // ====================================
     @Override
     public ActivityType createType(Long categoryId, ActivityType type) {
+        // Validate unit
+        if (type.getUnit() == null || type.getUnit().isEmpty()) {
+            throw new IllegalArgumentException("Unit must be provided");
+        }
 
+        // Validate typeName uniqueness
+        if (typeRepository.existsByTypeName(type.getTypeName())) {
+            throw new IllegalArgumentException("Type name must be unique");
+        }
+
+        // Fetch category
         ActivityCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Activity category not found with id: " + categoryId
-                        )
-                );
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Activity category not found with id: " + categoryId
+                ));
 
         type.setCategory(category);
         return typeRepository.save(type);
     }
 
-    // ====================================
-    // Get activity type by ID
-    // ====================================
     @Override
     public ActivityType getType(Long id) {
         return typeRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Activity type not found with id: " + id
-                        )
-                );
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Activity type not found with id: " + id
+                ));
     }
 
-    // ====================================
-    // Get all types by category
-    // ====================================
     @Override
     public List<ActivityType> getTypesByCategory(Long categoryId) {
-
         if (!categoryRepository.existsById(categoryId)) {
             throw new ResourceNotFoundException(
                     "Activity category not found with id: " + categoryId
             );
         }
-
         return typeRepository.findByCategoryId(categoryId);
     }
 }

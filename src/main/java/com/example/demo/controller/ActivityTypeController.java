@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.ActivityType;
+import com.example.demo.entity.ActivityType;
 import com.example.demo.service.ActivityTypeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/activity-types")
+@RequestMapping("/api/categories/{categoryId}/types")
 public class ActivityTypeController {
 
     private final ActivityTypeService activityTypeService;
@@ -18,39 +18,24 @@ public class ActivityTypeController {
         this.activityTypeService = activityTypeService;
     }
 
-    /**
-     * Create a new ActivityType under a category
-     */
-    @PostMapping("/category/{categoryId}")
+    @PostMapping
     public ResponseEntity<ActivityType> createType(
             @PathVariable Long categoryId,
-            @RequestBody ActivityType activityType) {
-
-        ActivityType createdType =
-                activityTypeService.createType(categoryId, activityType);
-
+            @RequestBody ActivityType type
+    ) {
+        ActivityType createdType = activityTypeService.createType(categoryId, type);
         return new ResponseEntity<>(createdType, HttpStatus.CREATED);
     }
 
-    /**
-     * Get ActivityType by ID
-     */
-    @GetMapping("/{id}")
-    public ResponseEntity<ActivityType> getType(@PathVariable Long id) {
-        ActivityType activityType = activityTypeService.getType(id);
-        return ResponseEntity.ok(activityType);
+    @GetMapping
+    public ResponseEntity<List<ActivityType>> getTypesByCategory(@PathVariable Long categoryId) {
+        List<ActivityType> types = activityTypeService.getTypesByCategory(categoryId);
+        return new ResponseEntity<>(types, HttpStatus.OK);
     }
 
-    /**
-     * Get all ActivityTypes by Category ID
-     */
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<ActivityType>> getTypesByCategory(
-            @PathVariable Long categoryId) {
-
-        List<ActivityType> types =
-                activityTypeService.getTypesByCategory(categoryId);
-
-        return ResponseEntity.ok(types);
+    @GetMapping("/{typeId}")
+    public ResponseEntity<ActivityType> getType(@PathVariable Long typeId) {
+        ActivityType type = activityTypeService.getType(typeId);
+        return new ResponseEntity<>(type, HttpStatus.OK);
     }
 }
