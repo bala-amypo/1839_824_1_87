@@ -7,4 +7,5 @@ private long id;
 @column (unique=true)
 private String categoryName;
 private String description;
+@PrePersist
 }
