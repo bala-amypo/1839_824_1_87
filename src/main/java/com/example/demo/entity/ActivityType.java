@@ -1,52 +1,43 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.PrePersist;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
-public class ActivityType
-{
+public class ActivityType {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String typeName;
-    private String unit;
-    private LocalDateTime createdAt;
 
-public Long getId(){
-    return id; 
-}
-public void setId(Long id){
-    this.id=id;
-}
-public String getTypeName(){
-    return typeName;
-}
-public void setTypeName(String typeName){
-    this.typeName=typeName;
-}
-public String getUnit(){
-    return unit;
-}
-public void setUnit(String unit){
-    this.unit=unit;
-}
-public LocalDateTime getCreatedAt(){
-    return createdAt;
+    private String name;
 
-}
-public void setCreatedAt(LocalDateTime createdAt){
-this.createdAt=createdAt;
-}
-public ActivityType(){}
-public ActivityType(Long id,String typeName,String unit,LocalDateTime createdAt){
-    this.id=id;
-    this.typeName=typeName;
-    this.unit=unit;
-    this.createdAt=createdAt;
-}
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private ActivityCategory category;
+
+    // ===== Getters & Setters =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ActivityCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ActivityCategory category) {
+        this.category = category;
+    }
 }
