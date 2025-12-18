@@ -12,6 +12,14 @@ import java.time.LocalDateTime;
 )
 public class User {
 
+    // =====================
+    // INLINE ENUM (FIX)
+    // =====================
+    public enum Role {
+        ADMIN,
+        USER
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,7 +55,7 @@ public class User {
     }
 
     // =====================
-    // Auto-generated fields
+    // Lifecycle callback
     // =====================
 
     @PrePersist
@@ -86,7 +94,7 @@ public class User {
         return password;
     }
 
-    // Password validation (≥ 8 chars)
+    // Password ≥ 8 chars
     public void setPassword(String password) {
         if (password == null || password.length() < 8) {
             throw new IllegalArgumentException(
