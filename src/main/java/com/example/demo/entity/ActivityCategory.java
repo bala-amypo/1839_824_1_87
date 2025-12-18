@@ -37,11 +37,11 @@ public LocalDateTime getCreatedAt(){
 public void setCreatedAt(LocalDateTime createdAt){
 this.createdAt=createdAt;
 }
-public ActivityCategory(){}
 public ActivityCategory(Long id,String categoryName,String description,LocalDateTime createdAt){
     this.id=id;
     this.categoryName=categoryName;
     this.description=description;
     this.createdAt=createdAt;
 }
+public ActivityCategory(){}
 }
