@@ -55,6 +55,6 @@ public ActivityLog(Long id,Double quantity, LocalDate activityDate,LocalDateTime
     this.quantity=quantity;
     this.activityDate=activityDate;
     this.loggedAt=loggedAt;
-    this.
+    this.estimatedEmission=estimatedEmission;
 }
 }
