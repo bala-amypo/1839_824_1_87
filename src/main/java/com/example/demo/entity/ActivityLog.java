@@ -30,19 +30,20 @@ public Double getIdQuantity(){
 public void setQuantity(Double quantity){
     this.quantity=quantity;
 }
-public (){
-    return unit;
+public LocalDate getIdActivityDate(){
+    return activityDate;
 }
-public void setUnit(String unit){
-    this.unit=unit;
+public void setActivityDate(LocalDate activityDate){
+    this.activityDate=activityDate;
 }
-public LocalDateTime getCreatedAt(){
-    return createdAt;
+public LocalDateTime getLoggedAt(){
+    return loggedAt;
 
 }
-public void setCreatedAt(LocalDateTime createdAt){
-this.createdAt=createdAt;
+public void setLoggedAt(LocalDateTime loggedAt){
+this.loggedAt=loggedAt;
 }
+public class Double 
 public ActivityLog(){}
 public ActivityLog(Long id,String typeName,String unit,LocalDateTime createdAt){
     this.id=id;
