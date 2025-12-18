@@ -24,13 +24,13 @@ public Long getId(){
 public void setId(Long id){
     this.id=id;
 }
-public Double getIdQuantity(){
+public Double getQuantity(){
     return quantity;
 }
 public void setQuantity(Double quantity){
     this.quantity=quantity;
 }
-public LocalDate getIdActivityDate(){
+public LocalDate getActivityDate(){
     return activityDate;
 }
 public void setActivityDate(LocalDate activityDate){
@@ -43,7 +43,7 @@ public LocalDateTime getLoggedAt(){
 public void setLoggedAt(LocalDateTime loggedAt){
 this.loggedAt=loggedAt;
 }
-public class Double getEstimatedEmission(){
+public Double getEstimatedEmission(){
     return estimatedEmission;
 }
 public void setEstimatedEmission(Double estimatedEmission){
