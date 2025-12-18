@@ -1,14 +1,12 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(
-    name = "activity_type",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = "type_name")
-    }
+    name = "activity_types",
+    uniqueConstraints = @UniqueConstraint(columnNames = "type_name")
 )
 public class ActivityType {
 
@@ -21,27 +19,21 @@ public class ActivityType {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    private ActivityCategory category;
 
     @Column(nullable = false)
     private String unit;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    // -------- Auto-generate createdAt --------
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
-    public ActivityType() {
-    }
-
-    public ActivityType(String typeName, Category category, String unit) {
-        this.typeName = typeName;
-        this.category = category;
-        this.unit = unit;
-    }
+    // -------- Getters & Setters --------
 
     public Long getId() {
         return id;
@@ -55,11 +47,11 @@ public class ActivityType {
         this.typeName = typeName;
     }
 
-    public Category getCategory() {
+    public ActivityCategory getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(ActivityCategory category) {
         this.category = category;
     }
 
