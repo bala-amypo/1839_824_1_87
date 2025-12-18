@@ -1,53 +1,47 @@
 package com.example.demo.entity;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.PrePersist;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
 @Entity
-public class ActivityCategory
-{
+@Table(
+    name = "activity_categories",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "name")
+    }
+)
+public class ActivityCategory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String categoryName;
-    private String description;
-    private LocalDateTime createdAt;
 
-public long getId(){
-    return id; 
-}
-public void setId(Long id){
-    this.id=id;
-}
-public String getCategoryName(){
-    return categoryName;
-}
-public void setCategoryName(String categoryName){
-    this.categoryName=categoryName;
-}
-public String getDescription(){
-    return description;
-}
-public void setDescription(String description){
-    this.description=description;
-}
-public LocalDateTime getCreatedAt(){
-    return createdAt;
+    @Column(nullable = false, unique = true)
+    private String name;
 
-}
-public void setCreatedAt(LocalDateTime createdAt){
-this.createdAt=createdAt;
-}
-public ActivityCategory(Long id,String categoryName,String description,LocalDateTime createdAt){
-    this.id=id;
-    this.categoryName=categoryName;
-    this.description=description;
-    this.createdAt=createdAt;
-}
-public ActivityCategory(){}
+    // =====================
+    // Constructors
+    // =====================
+
+    public ActivityCategory() {
+    }
+
+    public ActivityCategory(String name) {
+        this.name = name;
+    }
+
+    // =====================
+    // Getters & Setters
+    // =====================
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
