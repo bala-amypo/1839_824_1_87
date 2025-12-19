@@ -10,16 +10,12 @@ public class EmissionFactor {
     private Long id;
 
     private String activityType;
-
     private Double factorValue;
-
     private String unit;
 
-    // 🔹 No-arg constructor (REQUIRED by JPA)
     public EmissionFactor() {
     }
 
-    // 🔹 Getters & Setters
     public Long getId() {
         return id;
     }

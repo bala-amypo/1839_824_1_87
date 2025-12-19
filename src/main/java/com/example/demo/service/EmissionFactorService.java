@@ -10,7 +10,7 @@ public interface EmissionFactorService {
 
     EmissionFactor getFactorById(Long id);
 
-    List<EmissionFactor> getFactorByType(String activityType);
+    List<EmissionFactor> getByActivityType(String activityType);
 
     List<EmissionFactor> getAllFactors();
 }

@@ -26,11 +26,11 @@ public class EmissionFactorServiceImpl implements EmissionFactorService {
     @Override
     public EmissionFactor getFactorById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Factor not found"));
+                .orElseThrow(() -> new RuntimeException("EmissionFactor not found"));
     }
 
     @Override
-    public List<EmissionFactor> getFactorByType(String activityType) {
+    public List<EmissionFactor> getByActivityType(String activityType) {
         return repository.findByActivityType(activityType);
     }
 
