@@ -17,8 +17,6 @@ public class EmissionFactorController {
         this.service = service;
     }
 
-    // ✅ CREATE
-    // POST /api/factors/type/{activityType}
     @PostMapping("/type/{activityType}")
     public EmissionFactor createFactor(
             @PathVariable String activityType,
@@ -26,23 +24,14 @@ public class EmissionFactorController {
 
         return service.createFactor(activityType, factor);
     }
-
-    // ✅ GET BY ID
-    // GET /api/factors/{id}
     @GetMapping("/{id}")
     public EmissionFactor getFactorById(@PathVariable Long id) {
         return service.getFactorById(id);
     }
-
-    // ✅ GET BY TYPE
-    // GET /api/factors/type/{activityType}
     @GetMapping("/type/{activityType}")
     public List<EmissionFactor> getByType(@PathVariable String activityType) {
         return service.getByActivityType(activityType);
     }
-
-    // ✅ GET ALL
-    // GET /api/factors
     @GetMapping
     public List<EmissionFactor> getAll() {
         return service.getAllFactors();
