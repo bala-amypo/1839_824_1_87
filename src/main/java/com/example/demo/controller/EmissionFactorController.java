@@ -1,45 +1,46 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.EmissionFactor;
-import com.example.demo.service.EmissionFactorService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.demo.entity.EmissionFactor;
+import com.example.demo.service.EmissionFactorService;
 
 @RestController
 @RequestMapping("/api/factors")
 public class EmissionFactorController {
 
-    private final EmissionFactorService emissionFactorService;
+    private final EmissionFactorService service;
 
-    public EmissionFactorController(EmissionFactorService emissionFactorService) {
-        this.emissionFactorService = emissionFactorService;
+    public EmissionFactorController(EmissionFactorService service) {
+        this.service = service;
     }
 
+    // POST /api/factors/{activityTypeId}
     @PostMapping("/{activityTypeId}")
-    public ResponseEntity<EmissionFactor> create(
-            @PathVariable Long activityTypeId,
+    public EmissionFactor createFactor(
+            @PathVariable String activityTypeId,
             @RequestBody EmissionFactor factor) {
 
-        return new ResponseEntity<>(
-                emissionFactorService.createFactor(activityTypeId, factor),
-                HttpStatus.CREATED);
+        return service.createFactor(activityTypeId, factor);
     }
 
+    // GET /api/factors/{id}
     @GetMapping("/{id}")
-    public EmissionFactor getById(@PathVariable Long id) {
-        return emissionFactorService.getFactorById(id);
+    public EmissionFactor getFactor(@PathVariable Long id) {
+        return service.getFactorById(id);
     }
 
-    @GetMapping("/type/{activityTypeId}")
-    public EmissionFactor getByType(@PathVariable Long activityTypeId) {
-        return emissionFactorService.getFactorByActivityType(activityTypeId);
+    // GET /api/factors/type/{activityType}
+    @GetMapping("/type/{activityType}")
+    public List<EmissionFactor> getByType(@PathVariable String activityType) {
+        return service.getFactorByType(activityType);
     }
 
+    // GET /api/factors
     @GetMapping
     public List<EmissionFactor> getAll() {
-        return emissionFactorService.getAllFactors();
+        return service.getAllFactors();
     }
 }

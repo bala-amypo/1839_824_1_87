@@ -1,56 +1,41 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ActivityType;
-import com.example.demo.entity.EmissionFactor;
-import com.example.demo.repository.ActivityTypeRepository;
-import com.example.demo.repository.EmissionFactorRepository;
-import com.example.demo.service.EmissionFactorService;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.demo.entity.EmissionFactor;
+import com.example.demo.repository.EmissionFactorRepository;
+import com.example.demo.service.EmissionFactorService;
 
 @Service
 public class EmissionFactorServiceImpl implements EmissionFactorService {
 
-    private final EmissionFactorRepository emissionFactorRepository;
-    private final ActivityTypeRepository activityTypeRepository;
+    private final EmissionFactorRepository repository;
 
-    public EmissionFactorServiceImpl(EmissionFactorRepository emissionFactorRepository,
-                                     ActivityTypeRepository activityTypeRepository) {
-        this.emissionFactorRepository = emissionFactorRepository;
-        this.activityTypeRepository = activityTypeRepository;
+    public EmissionFactorServiceImpl(EmissionFactorRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public EmissionFactor createFactor(Long activityTypeId, EmissionFactor factor) {
-
-        ActivityType activityType = activityTypeRepository.findById(activityTypeId)
-                .orElseThrow(() -> new IllegalArgumentException("Activity type not found"));
-
-        // Enforce one factor per activity type
-        emissionFactorRepository.findByActivityTypeId(activityTypeId)
-                .ifPresent(f -> {
-                    throw new IllegalStateException("Emission factor already exists for this activity type");
-                });
-
+    public EmissionFactor createFactor(String activityType, EmissionFactor factor) {
         factor.setActivityType(activityType);
-        return emissionFactorRepository.save(factor);
+        return repository.save(factor);
     }
 
     @Override
     public EmissionFactor getFactorById(Long id) {
-        return emissionFactorRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Emission factor not found"));
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Factor not found"));
     }
 
     @Override
-    public EmissionFactor getFactorByActivityType(Long activityTypeId) {
-        return emissionFactorRepository.findByActivityTypeId(activityTypeId)
-                .orElseThrow(() -> new IllegalArgumentException("Emission factor not found for activity type"));
+    public List<EmissionFactor> getFactorByType(String activityType) {
+        return repository.findByActivityType(activityType);
     }
 
     @Override
     public List<EmissionFactor> getAllFactors() {
-        return emissionFactorRepository.findAll();
+        return repository.findAll();
     }
 }
