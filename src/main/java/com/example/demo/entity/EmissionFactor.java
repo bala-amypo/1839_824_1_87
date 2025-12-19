@@ -1,49 +1,81 @@
 package com.example.demo.entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
+
 @Entity
-public class EmissionFactor{
+@Table(name = "emission_factor")
+public class EmissionFactor {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /**
+     * One emission factor per activity type
+     * You can switch to @OneToOne if activityType is unique
+     */
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "activity_type_id", nullable = false)
+    private ActivityType activityType;
+
+    @Column(nullable = false)
     private Double factorValue;
+
+    @Column(nullable = false)
     private String unit;
+
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-    public Long getId(){
+
+    // ---- Lifecycle hook ----
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // ---- Validation ----
+    @PrePersist
+    @PreUpdate
+    private void validate() {
+        if (factorValue == null || factorValue <= 0) {
+            throw new IllegalArgumentException("factorValue must be greater than 0");
+        }
+    }
+
+    // ---- Constructors ----
+    public EmissionFactor() {}
+
+    // ---- Getters & Setters ----
+    public Long getId() {
         return id;
     }
-    public void setId(Long id){
-        this.id=id;
+
+    public ActivityType getActivityType() {
+        return activityType;
     }
-    public Double getFactorValue(){
+
+    public void setActivityType(ActivityType activityType) {
+        this.activityType = activityType;
+    }
+
+    public Double getFactorValue() {
         return factorValue;
     }
-    public void setFactorValue(Double factorValue){
-        this.factorValue=factorValue;
+
+    public void setFactorValue(Double factorValue) {
+        this.factorValue = factorValue;
     }
-    public String getUnit(){
+
+    public String getUnit() {
         return unit;
     }
-    public void setUnit(String unit){
-        this.unit=unit;
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
-    public LocalDateTime getCreatedAt(){
+
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
-    public void setCreatedAt(LocalDateTime createdAt){
-        this.createdAt=createdAt;
-    }
-public EmissionFactor()
-{}
-public EmissionFactor(Long id,Double factorValue,String unit,LocalDateTime createdAt){
-    this.id=id;
-    this.factorValue=factorValue;
-    this.unit=unit;
-    this.createdAt=createdAt;
-}
-
-
 }

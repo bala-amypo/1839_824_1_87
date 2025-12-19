@@ -1,8 +1,14 @@
 package com.example.demo.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.entity.EmissionFactor;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface EmissionFactorRepository extends JpaRepository<EmissionFactor, Long> {
+@Repository
+public interface EmissionFactorRepository
+        extends JpaRepository<EmissionFactor, Long> {
+
+    // Optional custom method
+    // Optional<EmissionFactor> findByActivityTypeId(Long activityTypeId);
 
 }
