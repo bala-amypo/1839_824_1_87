@@ -1,39 +1,40 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.ActivityCategory;
+import com.example.demo.entity.ActivityCategory;
 import com.example.demo.repository.ActivityCategoryRepository;
 import com.example.demo.service.ActivityCategoryService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ActivityCategoryServiceImpl implements ActivityCategoryService {
 
-    private final ActivityCategoryRepository repository;
+    private final ActivityCategoryRepository categoryRepository;
 
-    public ActivityCategoryServiceImpl(ActivityCategoryRepository repository) {
-        this.repository = repository;
+    public ActivityCategoryServiceImpl(ActivityCategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
     public ActivityCategory createCategory(ActivityCategory category) {
 
-        repository.findByCategoryName(category.getCategoryName())
-                .ifPresent(c -> {
-                    throw new RuntimeException("Category name already exists");
-                });
+        // Check unique category name
+        if (categoryRepository.existsByCategoryName(category.getCategoryName())) {
+            throw new RuntimeException("ActivityCategory with this name already exists");
+        }
 
-        return repository.save(category);
+        return categoryRepository.save(category);
     }
 
     @Override
-    public ActivityCategory getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("ActivityCategory not found"));
+    public ActivityCategory getCategory(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ActivityCategory not found with id: " + id));
     }
 
     @Override
-    public ActivityCategory getByName(String categoryName) {
-        return repository.findByCategoryName(categoryName)
-                .orElseThrow(() -> new RuntimeException("ActivityCategory not found"));
+    public List<ActivityCategory> getAllCategories() {
+        return categoryRepository.findAll();
     }
 }
