@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.EmissionFactor;
-import com.example.demo.repository.EmissionFactorRepository;
+import com.example.demo.service.EmissionFactorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,56 +12,34 @@ import java.util.List;
 @RequestMapping("/api/factors")
 public class EmissionFactorController {
 
-    private final EmissionFactorRepository emissionFactorRepository;
+    private final EmissionFactorService emissionFactorService;
 
-    public EmissionFactorController(EmissionFactorRepository emissionFactorRepository) {
-        this.emissionFactorRepository = emissionFactorRepository;
+    public EmissionFactorController(EmissionFactorService emissionFactorService) {
+        this.emissionFactorService = emissionFactorService;
     }
 
-    // --------------------------------------------------
-    // POST /api/factors/{activityTypeId}
-    // Create emission factor
-    // --------------------------------------------------
     @PostMapping("/{activityTypeId}")
-    public ResponseEntity<EmissionFactor> createFactor(
+    public ResponseEntity<EmissionFactor> create(
             @PathVariable Long activityTypeId,
             @RequestBody EmissionFactor factor) {
 
-        // activityType must already be set OR handled in service layer
-        EmissionFactor saved = emissionFactorRepository.save(factor);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                emissionFactorService.createFactor(activityTypeId, factor),
+                HttpStatus.CREATED);
     }
 
-    // --------------------------------------------------
-    // GET /api/factors/{id}
-    // Get factor by id
-    // --------------------------------------------------
     @GetMapping("/{id}")
-    public ResponseEntity<EmissionFactor> getFactor(@PathVariable Long id) {
-        return emissionFactorRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public EmissionFactor getById(@PathVariable Long id) {
+        return emissionFactorService.getFactorById(id);
     }
 
-    // --------------------------------------------------
-    // GET /api/factors/type/{activityTypeId}
-    // Get factor by activity type
-    // --------------------------------------------------
     @GetMapping("/type/{activityTypeId}")
-    public ResponseEntity<EmissionFactor> getFactorByType(
-            @PathVariable Long activityTypeId) {
-
-        return emissionFactorRepository.findByActivityTypeId(activityTypeId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public EmissionFactor getByType(@PathVariable Long activityTypeId) {
+        return emissionFactorService.getFactorByActivityType(activityTypeId);
     }
 
-    // --------------------------------------------------
-    // GET /api/factors
-    // List all factors
-    // --------------------------------------------------
     @GetMapping
-    public List<EmissionFactor> getAllFactors() {
-        return emissionFactorRepository.findAll();
+    public List<EmissionFactor> getAll() {
+        return emissionFactorService.getAllFactors();
     }
 }
