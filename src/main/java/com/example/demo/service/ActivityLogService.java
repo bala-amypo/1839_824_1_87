@@ -1,17 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.model.ActivityLog;
-
-import java.time.LocalDate;
+import com.example.demo.entity.ActivityLog;
 import java.util.List;
 
 public interface ActivityLogService {
-
-    ActivityLog save(ActivityLog activityLog);
-
-    List<ActivityLog> getByUserId(Long userId);
-
-    List<ActivityLog> getByActivityTypeId(Long activityTypeId);
-
-    List<ActivityLog> getByDateRange(LocalDate startDate, LocalDate endDate);
+    ActivityLog create(ActivityLog log);
+    List<ActivityLog> getAll();
 }

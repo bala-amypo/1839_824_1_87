@@ -1,11 +1,10 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.ActivityLog;
+import com.example.demo.entity.ActivityLog;
 import com.example.demo.repository.ActivityLogRepository;
 import com.example.demo.service.ActivityLogService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,22 +17,12 @@ public class ActivityLogServiceImpl implements ActivityLogService {
     }
 
     @Override
-    public ActivityLog save(ActivityLog activityLog) {
-        return repository.save(activityLog);
+    public ActivityLog create(ActivityLog log) {
+        return repository.save(log);
     }
 
     @Override
-    public List<ActivityLog> getByUserId(Long userId) {
-        return repository.findByUserId(userId);
-    }
-
-    @Override
-    public List<ActivityLog> getByActivityTypeId(Long activityTypeId) {
-        return repository.findByActivityTypeId(activityTypeId);
-    }
-
-    @Override
-    public List<ActivityLog> getByDateRange(LocalDate startDate, LocalDate endDate) {
-        return repository.findByActivityDateBetween(startDate, endDate);
+    public List<ActivityLog> getAll() {
+        return repository.findAll();
     }
 }
