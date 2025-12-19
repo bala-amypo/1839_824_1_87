@@ -23,7 +23,7 @@ public class EmissionFactorController {
             @RequestBody EmissionFactor factor) {
 
         return service.createFactor(activityType, factor);
-    }
+    }     
     @GetMapping("/{id}")
     public EmissionFactor getFactorById(@PathVariable Long id) {
         return service.getFactorById(id);
