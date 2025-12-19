@@ -1,12 +1,14 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(
-    name = "activity_categories",
-    uniqueConstraints = @UniqueConstraint(columnNames = "category_name")
+    name = "activity_category",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "category_name")
+    }
 )
 public class ActivityCategory {
 
@@ -17,10 +19,10 @@ public class ActivityCategory {
     @Column(name = "category_name", nullable = false, unique = true)
     private String categoryName;
 
-    @Column(length = 500)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     // Auto-generate createdAt
@@ -29,8 +31,16 @@ public class ActivityCategory {
         this.createdAt = LocalDateTime.now();
     }
 
-    // ----- Getters & Setters -----
+    // Constructors
+    public ActivityCategory() {
+    }
 
+    public ActivityCategory(String categoryName, String description) {
+        this.categoryName = categoryName;
+        this.description = description;
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
