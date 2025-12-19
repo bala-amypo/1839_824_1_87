@@ -1,18 +1,16 @@
-package com.example.repository;
+package com.example.demo.repository;
 
-import com.example.entity.ActivityLog;
+import com.example.demo.entity.ActivityLog;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ActivityLogRepository extends JpaRepository<ActivityLog, Long> {
+import java.time.LocalDate;
+import java.util.List;
 
-    // Custom query methods (optional examples)
+public interface ActivityLogRepository
+        extends JpaRepository<ActivityLog, Long> {
 
-    // Find logs by user ID
-    // List<ActivityLog> findByUserId(Long userId);
+    List<ActivityLog> findByUserId(Long userId);
 
-    // Find logs by action type
-    // List<ActivityLog> findByActionType(String actionType);
-
+    List<ActivityLog> findByUserIdAndActivityDateBetween(
+            Long userId, LocalDate start, LocalDate end);
 }
