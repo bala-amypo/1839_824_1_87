@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(
-    name = "activity_types",
-    uniqueConstraints = @UniqueConstraint(columnNames = "type_name")
+        name = "activity_type",
+        uniqueConstraints = @UniqueConstraint(columnNames = "type_name")
 )
 public class ActivityType {
 
@@ -19,7 +19,7 @@ public class ActivityType {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "category_id", nullable = false)
-    private ActivityCategory category;
+    private Category category;
 
     @Column(nullable = false)
     private String unit;
@@ -27,14 +27,12 @@ public class ActivityType {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // -------- Auto-generate createdAt --------
     @PrePersist
-    protected void onCreate() {
+    public void prePersist() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // -------- Getters & Setters --------
-
+    // getters & setters
     public Long getId() {
         return id;
     }
@@ -47,11 +45,11 @@ public class ActivityType {
         this.typeName = typeName;
     }
 
-    public ActivityCategory getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(ActivityCategory category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
