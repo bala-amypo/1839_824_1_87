@@ -10,14 +10,14 @@ public class ActivityType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String typeName;
 
-    public ActivityType() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private ActivityCategory category;
 
-    public ActivityType(String typeName) {
-        this.typeName = typeName;
+    public ActivityType() {
     }
 
     public Long getId() {
@@ -30,5 +30,14 @@ public class ActivityType {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
+    }
+
+    public ActivityCategory getCategory() {
+        return category;
+    }
+
+    // ✅ THIS METHOD FIXES ERROR #1
+    public void setCategory(ActivityCategory category) {
+        this.category = category;
     }
 }
