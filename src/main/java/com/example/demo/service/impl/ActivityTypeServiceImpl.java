@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.ActivityType;
-import com.example.demo.model.Category;
+import com.example.demo.entity.ActivityType;
+import com.example.demo.entity.Category;
 import com.example.demo.repository.ActivityTypeRepository;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.service.ActivityTypeService;
@@ -24,12 +24,10 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @Override
     public ActivityType create(ActivityType activityType) {
 
-        // unique typeName check
         if (activityTypeRepository.findByTypeName(activityType.getTypeName()).isPresent()) {
-            throw new RuntimeException("ActivityType name must be unique");
+            throw new RuntimeException("Type name already exists");
         }
 
-        // category validation
         Category category = categoryRepository.findById(
                 activityType.getCategory().getId()
         ).orElseThrow(() -> new RuntimeException("Category not found"));
