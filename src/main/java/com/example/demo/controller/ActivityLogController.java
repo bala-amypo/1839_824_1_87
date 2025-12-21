@@ -1,87 +1,58 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.ActivityLog;
-import com.example.demo.entity.ActivityType;
-import com.example.demo.entity.User;
-import com.example.demo.repository.ActivityLogRepository;
-import com.example.demo.repository.ActivityTypeRepository;
-import com.example.demo.repository.UserRepository;
-
-import org.springframework.http.HttpStatus;
+import com.example.demo.service.ActivityLogService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/activity-logs")
 public class ActivityLogController {
 
-    private final ActivityLogRepository activityLogRepository;
-    private final ActivityTypeRepository activityTypeRepository;
-    private final UserRepository userRepository;
+    private final ActivityLogService activityLogService;
 
-    public ActivityLogController(ActivityLogRepository activityLogRepository,
-                                 ActivityTypeRepository activityTypeRepository,
-                                 UserRepository userRepository) {
-        this.activityLogRepository = activityLogRepository;
-        this.activityTypeRepository = activityTypeRepository;
-        this.userRepository = userRepository;
+    public ActivityLogController(ActivityLogService activityLogService) {
+        this.activityLogService = activityLogService;
     }
 
-    @PostMapping
-    public ResponseEntity<?> createActivityLog(
-            @RequestParam Long activityTypeId,
-            @RequestParam Long userId,
-            @RequestParam Double quantity,
-            @RequestParam LocalDate activityDate) {
+    // Create a new activity log
+    @PostMapping("/{userId}/{typeId}")
+    public ResponseEntity<ActivityLog> logActivity(
+            @PathVariable Long userId,
+            @PathVariable Long typeId,
+            @RequestBody ActivityLog log) {
 
-        if (quantity <= 0) {
-            return ResponseEntity.badRequest().body("Quantity must be greater than 0");
-        }
-
-        if (activityDate.isAfter(LocalDate.now())) {
-            return ResponseEntity.badRequest().body("Activity date cannot be in the future");
-        }
-
-        Optional<ActivityType> activityTypeOpt = activityTypeRepository.findById(activityTypeId);
-        Optional<User> userOpt = userRepository.findById(userId);
-
-        if (activityTypeOpt.isEmpty() || userOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid activity type or user");
-        }
-
-        ActivityLog activityLog = new ActivityLog();
-        activityLog.setActivityType(activityTypeOpt.get());
-        activityLog.setUser(userOpt.get());
-        activityLog.setQuantity(quantity);
-        activityLog.setActivityDate(activityDate);
-
-        ActivityLog savedLog = activityLogRepository.save(activityLog);
-
-        return new ResponseEntity<>(savedLog, HttpStatus.CREATED);
+        // The service will handle estimatedEmission calculation
+        ActivityLog savedLog = activityLogService.logActivity(userId, typeId, log);
+        return ResponseEntity.ok(savedLog);
     }
 
-    @GetMapping
-    public List<ActivityLog> getAllActivityLogs() {
-        return activityLogRepository.findAll();
+    // Get all logs for a user
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<ActivityLog>> getLogsByUser(@PathVariable Long userId) {
+        List<ActivityLog> logs = activityLogService.getLogsByUser(userId);
+        return ResponseEntity.ok(logs);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ActivityLog> getActivityLogById(@PathVariable Long id) {
-        return activityLogRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // Get logs for a user between dates
+    @GetMapping("/{userId}/between")
+    public ResponseEntity<List<ActivityLog>> getLogsByUserAndDate(
+            @PathVariable Long userId,
+            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
+
+        List<ActivityLog> logs = activityLogService.getLogsByUserAndDate(userId, start, end);
+        return ResponseEntity.ok(logs);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteActivityLog(@PathVariable Long id) {
-        if (!activityLogRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        activityLogRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+    // Get a single log by id
+    @GetMapping("/log/{id}")
+    public ResponseEntity<ActivityLog> getLog(@PathVariable Long id) {
+        ActivityLog log = activityLogService.getLog(id);
+        return ResponseEntity.ok(log);
     }
 }
