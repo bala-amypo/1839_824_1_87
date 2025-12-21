@@ -1,55 +1,55 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.ActivityType;
-import com.example.demo.service.ActivityTypeService;
-import org.springframework.http.HttpStatus;
+import com.example.demo.entity.ActivityLog;
+import com.example.demo.service.ActivityLogService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/types")
-public class ActivityTypeController {
+@RequestMapping("/api/activity-logs")
+public class ActivityLogController {
 
-    private final ActivityTypeService typeService;
+    private final ActivityLogService activityLogService;
 
-    public ActivityTypeController(ActivityTypeService typeService) {
-        this.typeService = typeService;
+    public ActivityLogController(ActivityLogService activityLogService) {
+        this.activityLogService = activityLogService;
     }
 
-    // POST /api/types/category/{categoryId}
-    // create type under a category
-    @PostMapping("/category/{categoryId}")
-    public ResponseEntity<ActivityType> createType(
-            @PathVariable Long categoryId,
-            @RequestBody ActivityType type) {
-
-        ActivityType savedType =
-                typeService.createType(categoryId, type);
-
-        return new ResponseEntity<>(savedType, HttpStatus.CREATED);
+    // Create a new activity log
+    @PostMapping("/{userId}/{typeId}")
+    public ResponseEntity<ActivityLog> logActivity(
+            @PathVariable Long userId,
+            @PathVariable Long typeId,
+            @RequestBody ActivityLog log) {
+        ActivityLog savedLog = activityLogService.logActivity(userId, typeId, log);
+        return ResponseEntity.ok(savedLog);
     }
 
-    // GET /api/types/category/{categoryId}
-    // list types by category
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<ActivityType>> getTypesByCategory(
-            @PathVariable Long categoryId) {
-
-        return ResponseEntity.ok(
-                typeService.getTypesByCategory(categoryId)
-        );
+    // Get all logs for a user
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<ActivityLog>> getLogsByUser(@PathVariable Long userId) {
+        List<ActivityLog> logs = activityLogService.getLogsByUser(userId);
+        return ResponseEntity.ok(logs);
     }
 
-    // GET /api/types/{id}
-    // get type by id
-    @GetMapping("/{id}")
-    public ResponseEntity<ActivityType> getTypeById(
-            @PathVariable Long id) {
+    // Get logs for a user between dates
+    @GetMapping("/{userId}/between")
+    public ResponseEntity<List<ActivityLog>> getLogsByUserAndDate(
+            @PathVariable Long userId,
+            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
+        List<ActivityLog> logs = activityLogService.getLogsByUserAndDate(userId, start, end);
+        return ResponseEntity.ok(logs);
+    }
 
-        return ResponseEntity.ok(
-                typeService.getType(id)
-        );
+    // Get a single log by id
+    @GetMapping("/log/{id}")
+    public ResponseEntity<ActivityLog> getLog(@PathVariable Long id) {
+        ActivityLog log = activityLogService.getLog(id);
+        return ResponseEntity.ok(log);
     }
 }
