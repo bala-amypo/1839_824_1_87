@@ -1,55 +1,42 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.ActivityLog;
-import com.example.demo.service.ActivityLogService;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.example.demo.entity.ActivityType;
+import com.example.demo.service.ActivityTypeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/activity-logs")
-public class ActivityLogController {
+@RequestMapping("/api/activity-types")
+public class ActivityTypeController {
 
-    private final ActivityLogService activityLogService;
+    private final ActivityTypeService activityTypeService;
 
-    public ActivityLogController(ActivityLogService activityLogService) {
-        this.activityLogService = activityLogService;
+    public ActivityTypeController(ActivityTypeService activityTypeService) {
+        this.activityTypeService = activityTypeService;
     }
 
-    // Create a new activity log
-    @PostMapping("/{userId}/{typeId}")
-    public ResponseEntity<ActivityLog> logActivity(
-            @PathVariable Long userId,
-            @PathVariable Long typeId,
-            @RequestBody ActivityLog log) {
-        ActivityLog savedLog = activityLogService.logActivity(userId, typeId, log);
-        return ResponseEntity.ok(savedLog);
+    // Create a new activity type under a category
+    @PostMapping("/{categoryId}")
+    public ResponseEntity<ActivityType> createType(
+            @PathVariable Long categoryId,
+            @RequestBody ActivityType type) {
+        ActivityType savedType = activityTypeService.createType(categoryId, type);
+        return ResponseEntity.ok(savedType);
     }
 
-    // Get all logs for a user
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<ActivityLog>> getLogsByUser(@PathVariable Long userId) {
-        List<ActivityLog> logs = activityLogService.getLogsByUser(userId);
-        return ResponseEntity.ok(logs);
+    // Get a single activity type
+    @GetMapping("/{id}")
+    public ResponseEntity<ActivityType> getType(@PathVariable Long id) {
+        ActivityType type = activityTypeService.getType(id);
+        return ResponseEntity.ok(type);
     }
 
-    // Get logs for a user between dates
-    @GetMapping("/{userId}/between")
-    public ResponseEntity<List<ActivityLog>> getLogsByUserAndDate(
-            @PathVariable Long userId,
-            @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
-            @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
-        List<ActivityLog> logs = activityLogService.getLogsByUserAndDate(userId, start, end);
-        return ResponseEntity.ok(logs);
-    }
-
-    // Get a single log by id
-    @GetMapping("/log/{id}")
-    public ResponseEntity<ActivityLog> getLog(@PathVariable Long id) {
-        ActivityLog log = activityLogService.getLog(id);
-        return ResponseEntity.ok(log);
+    // Get all activity types under a category
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<ActivityType>> getTypesByCategory(@PathVariable Long categoryId) {
+        List<ActivityType> types = activityTypeService.getTypesByCategory(categoryId);
+        return ResponseEntity.ok(types);
     }
 }
