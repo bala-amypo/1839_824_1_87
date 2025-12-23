@@ -12,9 +12,7 @@ import java.time.LocalDateTime;
 )
 public class User {
 
-    // =====================
-    // INLINE ENUM (FIX)
-    // =====================
+
     public enum Role {
         ADMIN,
         USER
