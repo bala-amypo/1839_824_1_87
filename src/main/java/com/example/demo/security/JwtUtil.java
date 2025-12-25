@@ -8,6 +8,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Map;
 
+@Component
 public class JwtUtil {
 
     private static final String SECRET_KEY =
