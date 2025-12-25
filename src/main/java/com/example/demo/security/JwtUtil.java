@@ -4,7 +4,7 @@ import com.example.demo.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Map;
 
@@ -15,17 +15,19 @@ public class JwtUtil {
 
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    // 🔑 MUST be SecretKey (not Key)
+    private final SecretKey key =
+            Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
     /* ================= TOKEN CREATION ================= */
 
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .claims(claims)
+                .subject(subject)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(key)
                 .compact();
     }
 
@@ -42,24 +44,29 @@ public class JwtUtil {
 
     /* ================= TOKEN PARSING ================= */
 
-    // 🔑 THIS IS THE CRITICAL FIX
+    // ✅ jjwt 0.12.x compatible
     public Jwt<?, ?> parseToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
+        return Jwts.parser()
+                .verifyWith(key)
                 .build()
                 .parse(token);
     }
 
+    // ✅ CAST payload to Claims
+    private Claims getClaims(String token) {
+        return (Claims) parseToken(token).getPayload();
+    }
+
     public String extractUsername(String token) {
-        return (String) parseToken(token).getPayload().get("sub");
+        return getClaims(token).getSubject();
     }
 
     public String extractRole(String token) {
-        return (String) parseToken(token).getPayload().get("role");
+        return (String) getClaims(token).get("role");
     }
 
     public Long extractUserId(String token) {
-        Object id = parseToken(token).getPayload().get("userId");
+        Object id = getClaims(token).get("userId");
         if (id instanceof Integer) {
             return ((Integer) id).longValue();
         }

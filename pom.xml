@@ -15,7 +15,7 @@
     <packaging>jar</packaging>
 
     <name>Carbon Footprint Estimator</name>
-    <description>Spring Boot + JWT + Swagger Project</description>
+    <description>Spring Boot + JWT + Swagger</description>
 
     <!-- SPRING BOOT PARENT -->
     <parent>
@@ -51,22 +51,22 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- JWT -->
+        <!-- JWT (TEST COMPATIBLE – VERY IMPORTANT) -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>0.11.5</version>
+            <version>0.12.3</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>0.11.5</version>
+            <version>0.12.3</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <version>0.11.5</version>
+            <version>0.12.3</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -77,7 +77,7 @@
             <version>2.5.0</version>
         </dependency>
 
-        <!-- DATABASE (H2 for testing) -->
+        <!-- DATABASE (H2 for local & testing) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
