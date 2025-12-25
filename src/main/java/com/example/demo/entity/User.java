@@ -4,75 +4,49 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    name = "users",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
-    }
-)
+@Table(name = "users")
 public class User {
-
-
-    public enum Role {
-        ADMIN,
-        USER
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String fullName;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    private String role;
 
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    // =====================
-    // Constructors
-    // =====================
 
     public User() {
     }
 
-    public User(String fullName, String email, String password, Role role) {
+    public User(Long id, String fullName, String email, String password, String role, LocalDateTime createdAt) {
+        this.id = id;
         this.fullName = fullName;
         this.email = email;
-        setPassword(password);
+        this.password = password;
         this.role = role;
+        this.createdAt = createdAt;
     }
-
-    // =====================
-    // Lifecycle callback
-    // =====================
 
     @PrePersist
-    protected void onCreate() {
+    public void prePersist() {
         this.createdAt = LocalDateTime.now();
-        if (this.role == null) {
-            this.role = Role.USER;
-        }
     }
 
-    // =====================
-    // Getters & Setters
-    // =====================
+    // getters and setters
 
     public Long getId() {
         return id;
     }
-    public void setId(){
-    this.id=id;
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFullName() {
@@ -94,26 +68,24 @@ public class User {
     public String getPassword() {
         return password;
     }
-
-    // Password ≥ 8 chars
+ 
     public void setPassword(String password) {
-        if (password == null || password.length() < 8) {
-            throw new IllegalArgumentException(
-                "Password must be at least 8 characters long"
-            );
-        }
         this.password = password;
     }
-
-    public Role getRole() {
+ 
+    public String getRole() {
         return role;
     }
-
-    public void setRole(Role role) {
+ 
+    public void setRole(String role) {
         this.role = role;
     }
-
+ 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+ 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
