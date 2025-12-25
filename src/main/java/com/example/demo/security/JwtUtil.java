@@ -13,11 +13,11 @@ public class JwtUtil {
     private static final String SECRET_KEY =
             "this_is_a_very_secure_secret_key_for_jwt_testing_123456";
 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 hours
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10;
 
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
-    /* ===================== TOKEN CREATION ===================== */
+    /* ================= TOKEN CREATION ================= */
 
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
@@ -30,46 +30,45 @@ public class JwtUtil {
     }
 
     public String generateTokenForUser(User user) {
-        Map<String, Object> claims = Map.of(
-                "userId", user.getId(),
-                "email", user.getEmail(),
-                "role", user.getRole()
+        return generateToken(
+                Map.of(
+                        "userId", user.getId(),
+                        "email", user.getEmail(),
+                        "role", user.getRole()
+                ),
+                user.getEmail()
         );
-
-        return generateToken(claims, user.getEmail());
     }
 
-    /* ===================== TOKEN PARSING ===================== */
+    /* ================= TOKEN PARSING ================= */
 
-    public Jws<Claims> parseToken(String token) {
+    // 🔑 THIS IS THE CRITICAL FIX
+    public Jwt<?, ?> parseToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(token);
+                .parse(token);
     }
 
     public String extractUsername(String token) {
-        return parseToken(token).getBody().getSubject();
+        return (String) parseToken(token).getPayload().get("sub");
     }
 
     public String extractRole(String token) {
-        return (String) parseToken(token).getBody().get("role");
+        return (String) parseToken(token).getPayload().get("role");
     }
 
     public Long extractUserId(String token) {
-        Object id = parseToken(token).getBody().get("userId");
+        Object id = parseToken(token).getPayload().get("userId");
         if (id instanceof Integer) {
             return ((Integer) id).longValue();
         }
         return (Long) id;
     }
 
-    /* ===================== VALIDATION ===================== */
-
     public boolean isTokenValid(String token, String username) {
         try {
-            String tokenUsername = extractUsername(token);
-            return tokenUsername.equals(username);
+            return extractUsername(token).equals(username);
         } catch (Exception e) {
             return false;
         }
