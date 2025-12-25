@@ -2,41 +2,33 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ActivityType;
 import com.example.demo.service.ActivityTypeService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/activity-types")
+@RequestMapping("/api/types")
 public class ActivityTypeController {
 
-    private final ActivityTypeService activityTypeService;
+    private final ActivityTypeService typeService;
 
-    public ActivityTypeController(ActivityTypeService activityTypeService) {
-        this.activityTypeService = activityTypeService;
+    public ActivityTypeController(ActivityTypeService typeService) {
+        this.typeService = typeService;
     }
 
-    // Create a new activity type under a category
-    @PostMapping("/{categoryId}")
-    public ResponseEntity<ActivityType> createType(
-            @PathVariable Long categoryId,
-            @RequestBody ActivityType type) {
-        ActivityType savedType = activityTypeService.createType(categoryId, type);
-        return ResponseEntity.ok(savedType);
+    @PostMapping("/category/{categoryId}")
+    public ActivityType create(@PathVariable Long categoryId,
+                               @RequestBody ActivityType type) {
+        return typeService.createType(categoryId, type);
     }
 
-    // Get a single activity type
     @GetMapping("/{id}")
-    public ResponseEntity<ActivityType> getType(@PathVariable Long id) {
-        ActivityType type = activityTypeService.getType(id);
-        return ResponseEntity.ok(type);
+    public ActivityType get(@PathVariable Long id) {
+        return typeService.getType(id);
     }
 
-    // Get all activity types under a category
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<ActivityType>> getTypesByCategory(@PathVariable Long categoryId) {
-        List<ActivityType> types = activityTypeService.getTypesByCategory(categoryId);
-        return ResponseEntity.ok(types);
+    public List<ActivityType> getByCategory(@PathVariable Long categoryId) {
+        return typeService.getTypesByCategory(categoryId);
     }
 }
