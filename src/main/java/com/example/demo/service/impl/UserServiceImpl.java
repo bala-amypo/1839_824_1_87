@@ -12,28 +12,30 @@ import java.util.List;
 @Service
 public class UserServiceImpl {
 
-    private final UserRepository repo;
+    private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
-    public UserServiceImpl(UserRepository r, PasswordEncoder e) {
-        this.repo = r;
-        this.encoder = e;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder) {
+        this.userRepository = userRepository;
+        this.encoder = encoder;
     }
 
-    public User registerUser(User u) {
-        if (repo.existsByEmail(u.getEmail()))
+    public User registerUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail()))
             throw new ValidationException("Email already in use");
 
-        if (u.getPassword().length() < 8)
+        if (user.getPassword().length() < 8)
             throw new ValidationException("Password must be at least 8 characters");
 
-        u.setPassword(encoder.encode(u.getPassword()));
-        if (u.getRole() == null) u.setRole("USER");
-        return repo.save(u);
+        user.setPassword(encoder.encode(user.getPassword()));
+        if (user.getRole() == null)
+            user.setRole("USER");
+
+        return userRepository.save(user);
     }
 
     public User getUser(Long id) {
-        return repo.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

@@ -7,32 +7,27 @@ import com.example.demo.repository.ActivityCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 public class ActivityCategoryServiceImpl {
 
-    private final ActivityCategoryRepository categoryRepository;
+    private final ActivityCategoryRepository repo;
 
-    public ActivityCategoryServiceImpl(ActivityCategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public ActivityCategoryServiceImpl(ActivityCategoryRepository repo) {
+        this.repo = repo;
     }
 
-    public ActivityCategory createCategory(ActivityCategory category) {
-
-        if (categoryRepository.existsByCategoryName(category.getCategoryName())) {
+    public ActivityCategory createCategory(ActivityCategory c) {
+        if (repo.existsByCategoryName(c.getCategoryName()))
             throw new ValidationException("Category name must be unique");
-        }
-
-        return categoryRepository.save(category);
+        return repo.save(c);
     }
 
     public ActivityCategory getCategory(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Category not found"));
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
     public List<ActivityCategory> getAllCategories() {
-        return categoryRepository.findAll();
+        return repo.findAll();
     }
 }

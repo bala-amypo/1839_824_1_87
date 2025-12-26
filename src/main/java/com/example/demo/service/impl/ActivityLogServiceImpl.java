@@ -17,32 +17,42 @@ public class ActivityLogServiceImpl {
     private final ActivityTypeRepository typeRepo;
     private final EmissionFactorRepository factorRepo;
 
-    public ActivityLogServiceImpl(ActivityLogRepository l, UserRepository u,
-                                  ActivityTypeRepository t, EmissionFactorRepository f) {
-        this.logRepo = l;
-        this.userRepo = u;
-        this.typeRepo = t;
-        this.factorRepo = f;
+    public ActivityLogServiceImpl(ActivityLogRepository logRepo,
+                                  UserRepository userRepo,
+                                  ActivityTypeRepository typeRepo,
+                                  EmissionFactorRepository factorRepo) {
+        this.logRepo = logRepo;
+        this.userRepo = userRepo;
+        this.typeRepo = typeRepo;
+        this.factorRepo = factorRepo;
     }
 
     public ActivityLog logActivity(Long userId, Long typeId, ActivityLog log) {
 
-        User u = userRepo.findById(userId)
+        User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        ActivityType t = typeRepo.findById(typeId)
+        ActivityType type = typeRepo.findById(typeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
         if (log.getActivityDate().isAfter(LocalDate.now()))
             throw new ValidationException("cannot be in the future");
 
-        EmissionFactor f = factorRepo.findByActivityType_Id(typeId)
+        EmissionFactor factor = factorRepo.findByActivityType_Id(typeId)
                 .orElseThrow(() -> new ValidationException("No emission factor configured"));
 
-        log.setUser(u);
-        log.setActivityType(t);
-        log.setEstimatedEmission(log.getQuantity() * f.getFactorValue());
+        log.setUser(user);
+        log.setActivityType(type);
+        log.setEstimatedEmission(log.getQuantity() * factor.getFactorValue());
 
         return logRepo.save(log);
+    }
+
+    public List<ActivityLog> getLogsByUser(Long userId) {
+        return logRepo.findByUser_Id(userId);
+    }
+
+    public List<ActivityLog> getLogsByUserAndDate(Long userId, LocalDate s, LocalDate e) {
+        return logRepo.findByUser_IdAndActivityDateBetween(userId, s, e);
     }
 }

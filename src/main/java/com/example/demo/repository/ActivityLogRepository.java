@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ActivityLogRepository extends JpaRepository<ActivityLog, Long> {
-    List<ActivityLog> findByUser_Id(Long id);
-    List<ActivityLog> findByUser_IdAndActivityDateBetween(Long id, LocalDate s, LocalDate e);
+    List<ActivityLog> findByUser_Id(Long userId);
+    List<ActivityLog> findByUser_IdAndActivityDateBetween(Long userId, LocalDate start, LocalDate end);
 }
-
