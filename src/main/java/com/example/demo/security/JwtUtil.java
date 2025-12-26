@@ -5,22 +5,23 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 
-import java.security.Key;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class JwtUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // OLD JJWT requires String secret, not Key
+    private static final String SECRET_KEY = "mysecretkeymysecretkeymysecretkey";
 
     // Used in t60_generateJwtToken_containsSubject
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .signWith(key)
+                .setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
@@ -50,11 +51,10 @@ public class JwtUtil {
         return extractUsername(token).equals(username);
     }
 
-    // 🔥 THIS IS THE EXACT FIX FOR YOUR ERROR
+    // 🔥 OLD JJWT STYLE — THIS FIXES YOUR ERROR
     public Jws<Claims> parseToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token);
     }
 }
