@@ -5,7 +5,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JwtUtil {
 
@@ -44,7 +45,8 @@ public class JwtUtil {
     }
 
     public Jws<Claims> parseToken(String token) {
-        Jwts.parser().setSigningKey(key).parseClaimsJws(token);
-
+        return Jwts.parser()
+                .setSigningKey(key)
+                .parseClaimsJws(token);
     }
 }
