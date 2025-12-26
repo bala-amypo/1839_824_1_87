@@ -8,6 +8,14 @@
     <!-- REQUIRED -->
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- JWT (LOCKED + CONSISTENT) -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.9.1</version>
+</dependency>
+
+
     <!-- PROJECT INFO -->
     <groupId>com.example</groupId>
     <artifactId>demo</artifactId>
