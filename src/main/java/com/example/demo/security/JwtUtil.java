@@ -2,29 +2,28 @@ package com.example.demo.security;
 
 import com.example.demo.entity.User;
 import io.jsonwebtoken.*;
-import org.springframework.stereotype.Component;
+import io.jsonwebtoken.security.Keys;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.security.Key;
+import java.util.*;
 
-@Component
 public class JwtUtil {
 
-    private static final String SECRET = "secretsecretsecretsecretsecret123";
+    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .signWith(SignatureAlgorithm.HS256, SECRET)
+                .signWith(key)
                 .compact();
     }
 
     public String generateTokenForUser(User user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", user.getId());
         claims.put("email", user.getEmail());
         claims.put("role", user.getRole());
+        claims.put("userId", user.getId());
         return generateToken(claims, user.getEmail());
     }
 
@@ -45,8 +44,6 @@ public class JwtUtil {
     }
 
     public Jws<Claims> parseToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET)
-                .parseClaimsJws(token);
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
     }
 }
