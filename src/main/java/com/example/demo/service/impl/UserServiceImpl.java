@@ -6,10 +6,12 @@ import com.example.demo.exception.ValidationException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Service   // 🔥 REQUIRED – WITHOUT THIS APP WILL NOT START
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -32,7 +34,7 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException("Password must be at least 8 characters");
         }
 
-        // 🔥 FIX: prevent NullPointerException in tests
+        // Safe for both runtime + tests
         if (passwordEncoder != null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
@@ -52,13 +54,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
