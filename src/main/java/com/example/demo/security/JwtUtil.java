@@ -46,9 +46,10 @@ public class JwtUtil {
         return extractUsername(token).equals(username);
     }
 
-    // 🔥 THIS IS THE CRITICAL FIX
+    // 🔥 FINAL FIX: explicit cast
+    @SuppressWarnings("unchecked")
     public Jwt<?, Claims> parseToken(String token) {
-        return Jwts.parser()
+        return (Jwt<?, Claims>) Jwts.parser()
                 .verifyWith(key)
                 .build()
                 .parse(token);
