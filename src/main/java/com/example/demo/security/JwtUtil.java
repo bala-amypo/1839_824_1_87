@@ -49,7 +49,7 @@ public class JwtUtil {
         return extractUsername(token).equals(username);
     }
 
-    // REQUIRED BY TESTS (supports getPayload())
+    // 🔥 IMPORTANT: NO getPayload() here
     public Jwt<?, ?> parseToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -58,6 +58,7 @@ public class JwtUtil {
     }
 
     private Claims getClaims(String token) {
-        return (Claims) parseToken(token).getPayload();
+        Jwt<?, ?> jwt = parseToken(token);
+        return (Claims) jwt.getBody(); // ✅ correct for jjwt 0.11.5
     }
 }
