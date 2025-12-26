@@ -46,15 +46,15 @@ public class JwtUtil {
         return extractUsername(token).equals(username);
     }
 
-    // REQUIRED BY TESTS
-    public Jwt<?, ?> parseToken(String token) {
+    // 🔥 THIS IS THE CRITICAL FIX
+    public Jwt<?, Claims> parseToken(String token) {
         return Jwts.parser()
-                .verifyWith(key)   // ✅ NOW MATCHES SecretKey
+                .verifyWith(key)
                 .build()
                 .parse(token);
     }
 
     private Claims getClaims(String token) {
-        return (Claims) parseToken(token).getPayload(); // ✅ required by tests
+        return parseToken(token).getPayload();
     }
 }
