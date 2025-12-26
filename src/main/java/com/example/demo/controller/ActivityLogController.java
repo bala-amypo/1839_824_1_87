@@ -12,33 +12,33 @@ import java.util.List;
 @RequestMapping("/api/logs")
 public class ActivityLogController {
 
-    private final ActivityLogService logService;
+    private final ActivityLogService service;
 
-    public ActivityLogController(ActivityLogService logService) {
-        this.logService = logService;
+    public ActivityLogController(ActivityLogService service) {
+        this.service = service;
     }
 
     @PostMapping("/{userId}/{typeId}")
     public ActivityLog log(@PathVariable Long userId,
                            @PathVariable Long typeId,
-                           @RequestBody ActivityLogRequest request) {
+                           @RequestBody ActivityLogRequest req) {
 
         ActivityLog log = new ActivityLog();
-        log.setQuantity(request.getQuantity());
-        log.setActivityDate(request.getActivityDate());
+        log.setQuantity(req.getQuantity());
+        log.setActivityDate(req.getActivityDate());
 
-        return logService.logActivity(userId, typeId, log);
+        return service.logActivity(userId, typeId, log);
     }
 
     @GetMapping("/user/{userId}")
     public List<ActivityLog> byUser(@PathVariable Long userId) {
-        return logService.getLogsByUser(userId);
+        return service.getLogsByUser(userId);
     }
 
     @GetMapping("/user/{userId}/range")
-    public List<ActivityLog> byUserAndDate(@PathVariable Long userId,
-                                           @RequestParam LocalDate start,
-                                           @RequestParam LocalDate end) {
-        return logService.getLogsByUserAndDate(userId, start, end);
+    public List<ActivityLog> byDate(@PathVariable Long userId,
+                                    @RequestParam LocalDate start,
+                                    @RequestParam LocalDate end) {
+        return service.getLogsByUserAndDate(userId, start, end);
     }
 }

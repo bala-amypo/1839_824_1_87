@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
+    private final UserService service;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserService service) {
+        this.service = service;
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable Long id) {
-        return userService.getUser(id);
+        return service.getUser(id);
     }
 }

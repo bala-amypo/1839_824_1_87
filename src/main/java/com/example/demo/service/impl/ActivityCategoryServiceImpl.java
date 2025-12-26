@@ -4,30 +4,36 @@ import com.example.demo.entity.ActivityCategory;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.ValidationException;
 import com.example.demo.repository.ActivityCategoryRepository;
+import com.example.demo.service.ActivityCategoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
-public class ActivityCategoryServiceImpl {
+public class ActivityCategoryServiceImpl implements ActivityCategoryService {
 
-    private final ActivityCategoryRepository repo;
+    private final ActivityCategoryRepository repository;
 
-    public ActivityCategoryServiceImpl(ActivityCategoryRepository repo) {
-        this.repo = repo;
+    public ActivityCategoryServiceImpl(ActivityCategoryRepository repository) {
+        this.repository = repository;
     }
 
-    public ActivityCategory createCategory(ActivityCategory c) {
-        if (repo.existsByCategoryName(c.getCategoryName()))
+    @Override
+    public ActivityCategory createCategory(ActivityCategory category) {
+        if (repository.existsByCategoryName(category.getCategoryName()))
             throw new ValidationException("Category name must be unique");
-        return repo.save(c);
+
+        return repository.save(category);
     }
 
+    @Override
     public ActivityCategory getCategory(Long id) {
-        return repo.findById(id)
+        return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }
 
+    @Override
     public List<ActivityCategory> getAllCategories() {
-        return repo.findAll();
+        return repository.findAll();
     }
 }
