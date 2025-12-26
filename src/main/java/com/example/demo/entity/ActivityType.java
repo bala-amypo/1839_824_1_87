@@ -6,8 +6,10 @@ import java.time.LocalDateTime;
 @Entity
 public class ActivityType {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String typeName;
 
     @ManyToOne
@@ -18,19 +20,26 @@ public class ActivityType {
 
     public ActivityType() {}
 
-    public ActivityType(Long id, String name, ActivityCategory cat, String unit, LocalDateTime createdAt) {
+    public ActivityType(Long id, String typeName,
+                        ActivityCategory category,
+                        String unit, LocalDateTime createdAt) {
         this.id = id;
-        this.typeName = name;
-        this.category = cat;
+        this.typeName = typeName;
+        this.category = category;
         this.unit = unit;
         this.createdAt = createdAt;
     }
 
     @PrePersist
     public void prePersist() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
+    // REQUIRED
     public Long getId() { return id; }
+    public String getUnit() { return unit; }
+    public void setUnit(String unit) { this.unit = unit; }
+
     public ActivityCategory getCategory() { return category; }
+    public void setCategory(ActivityCategory category) { this.category = category; }
 }

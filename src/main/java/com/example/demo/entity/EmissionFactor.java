@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
 @Entity
 public class EmissionFactor {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -18,20 +19,27 @@ public class EmissionFactor {
 
     public EmissionFactor() {}
 
-    public EmissionFactor(Long id, ActivityType type, Double value, String unit, LocalDateTime createdAt) {
+    public EmissionFactor(Long id, ActivityType activityType,
+                          Double factorValue, String unit,
+                          LocalDateTime createdAt) {
         this.id = id;
-        this.activityType = type;
-        this.factorValue = value;
+        this.activityType = activityType;
+        this.factorValue = factorValue;
         this.unit = unit;
         this.createdAt = createdAt;
     }
 
     @PrePersist
     public void prePersist() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
+    // REQUIRED
     public Long getId() { return id; }
-    public Double getFactorValue() { return factorValue; }
     public ActivityType getActivityType() { return activityType; }
+    public void setActivityType(ActivityType activityType) {
+        this.activityType = activityType;
+    }
+
+    public Double getFactorValue() { return factorValue; }
 }
