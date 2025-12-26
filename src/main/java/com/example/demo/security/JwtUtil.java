@@ -4,14 +4,14 @@ import com.example.demo.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class JwtUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
@@ -46,15 +46,15 @@ public class JwtUtil {
         return extractUsername(token).equals(username);
     }
 
-    // 🔥 REQUIRED BY TESTS
+    // REQUIRED BY TESTS
     public Jwt<?, ?> parseToken(String token) {
         return Jwts.parser()
-                .verifyWith(key)
+                .verifyWith(key)   // ✅ NOW MATCHES SecretKey
                 .build()
                 .parse(token);
     }
 
     private Claims getClaims(String token) {
-        return (Claims) parseToken(token).getPayload(); // ✅ NOW EXISTS
+        return (Claims) parseToken(token).getPayload(); // ✅ required by tests
     }
 }
