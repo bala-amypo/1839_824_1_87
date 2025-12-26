@@ -1,7 +1,10 @@
 package com.example.demo.security;
 
 import com.example.demo.entity.User;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
@@ -12,6 +15,7 @@ public class JwtUtil {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
+    // Used in t60_generateJwtToken_containsSubject
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -20,11 +24,13 @@ public class JwtUtil {
                 .compact();
     }
 
+    // Used in t61–t71
     public String generateTokenForUser(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.getEmail());
         claims.put("role", user.getRole());
         claims.put("userId", user.getId());
+
         return generateToken(claims, user.getEmail());
     }
 
@@ -44,9 +50,11 @@ public class JwtUtil {
         return extractUsername(token).equals(username);
     }
 
+    // 🔥 THIS IS THE EXACT FIX FOR YOUR ERROR
     public Jws<Claims> parseToken(String token) {
-        return Jwts.parser()
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token);
     }
 }
