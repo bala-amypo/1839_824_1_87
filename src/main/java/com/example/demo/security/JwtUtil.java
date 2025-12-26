@@ -1,10 +1,7 @@
 package com.example.demo.security;
 
 import com.example.demo.entity.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import java.security.Key;
@@ -18,9 +15,9 @@ public class JwtUtil {
 
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date())
+                .claims(claims)
+                .subject(subject)
+                .issuedAt(new Date())
                 .signWith(key)
                 .compact();
     }
@@ -49,16 +46,15 @@ public class JwtUtil {
         return extractUsername(token).equals(username);
     }
 
-    // 🔥 IMPORTANT: NO getPayload() here
+    // 🔥 REQUIRED BY TESTS
     public Jwt<?, ?> parseToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
+        return Jwts.parser()
+                .verifyWith(key)
                 .build()
                 .parse(token);
     }
 
     private Claims getClaims(String token) {
-        Jwt<?, ?> jwt = parseToken(token);
-        return (Claims) jwt.getBody(); // ✅ correct for jjwt 0.11.5
+        return (Claims) parseToken(token).getPayload(); // ✅ NOW EXISTS
     }
 }
