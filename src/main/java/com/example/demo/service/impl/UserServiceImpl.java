@@ -12,47 +12,28 @@ import java.util.List;
 @Service
 public class UserServiceImpl {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserRepository repo;
+    private final PasswordEncoder encoder;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public UserServiceImpl(UserRepository r, PasswordEncoder e) {
+        this.repo = r;
+        this.encoder = e;
     }
 
-    public User registerUser(User user) {
-
-        if (userRepository.existsByEmail(user.getEmail())) {
+    public User registerUser(User u) {
+        if (repo.existsByEmail(u.getEmail()))
             throw new ValidationException("Email already in use");
-        }
 
-        if (user.getPassword() == null || user.getPassword().length() < 8) {
+        if (u.getPassword().length() < 8)
             throw new ValidationException("Password must be at least 8 characters");
-        }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        if (user.getRole() == null) {
-            user.setRole("USER");
-        }
-
-        return userRepository.save(user);
+        u.setPassword(encoder.encode(u.getPassword()));
+        if (u.getRole() == null) u.setRole("USER");
+        return repo.save(u);
     }
 
     public User getUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
-    }
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public User getByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found"));
+        return repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
