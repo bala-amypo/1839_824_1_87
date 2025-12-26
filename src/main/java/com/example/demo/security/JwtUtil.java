@@ -2,7 +2,6 @@ package com.example.demo.security;
 
 import com.example.demo.entity.User;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -14,7 +13,6 @@ public class JwtUtil {
 
     private static final String SECRET_KEY = "verysecretkeyverysecretkey123";
 
-    // t60
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -24,7 +22,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    // t61–t71
     public String generateTokenForUser(User user) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.getEmail());
@@ -49,12 +46,10 @@ public class JwtUtil {
         return extractUsername(token).equals(username);
     }
 
-    // ✅ VERSION-SAFE PARSING (NO parseClaimsJws)
     private Claims getClaims(String token) {
-        Jwt<?, ?> jwt = Jwts.parser()
+        return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
-                .parse(token);
-
-        return (Claims) jwt.getPayload();
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
