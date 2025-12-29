@@ -46,7 +46,7 @@ public class JwtUtil {
         return extractUsername(token).equals(username);
     }
 
-    // 🔥 FINAL FIX: explicit cast
+    //  FINAL FIX: explicit cast
     @SuppressWarnings("unchecked")
     public Jwt<?, Claims> parseToken(String token) {
         return (Jwt<?, Claims>) Jwts.parser()
