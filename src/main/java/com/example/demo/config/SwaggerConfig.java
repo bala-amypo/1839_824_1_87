@@ -64,10 +64,10 @@ public class SwaggerConfig {
     public OpenAPI api() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Hostel Roommate Compatibility Matcher API")
+                        .title("Carbon Footprint Estimator API")
                         .version("1.0"))
                 .servers(List.of(
-                        new Server().url("")
+                        new Server().url("https://9043.32procr.amypo.ai/")
                 ))
                 .addSecurityItem(
                         new SecurityRequirement().addList(SECURITY_SCHEME_NAME)
